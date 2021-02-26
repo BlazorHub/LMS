@@ -1,0 +1,17 @@
+﻿@namespace LMS.Web
+@inherits BaseLayoutComponent
+
+<CascadingValue Value="this">
+    <AntDesign.Pro.Layout.BasicLayout Title="@Config.Site.DisplayName" Logo="_logo" MenuData="_menuData">
+        <RightContentRender>
+            <LMS.Web.Shared.Header />
+        </RightContentRender>
+        <ChildContent>
+            @Body
+        </ChildContent>
+        <FooterRender>
+            <LMS.Web.Shared.Footer />
+        </FooterRender>
+    </AntDesign.Pro.Layout.BasicLayout>
+    <SettingDrawer />
+</CascadingValue>

@@ -1,0 +1,18 @@
+﻿@model MessageViewModel
+@{
+    ViewBag.Title = Model.Title;
+}
+
+<div class="alert alert-@Model.Type.ToString().ToLower() mt-4" role="alert">
+    <h4 class="alert-heading">@Model.Title</h4>
+    @if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <p>@Model.Message</p>
+    }
+    @if (!string.IsNullOrEmpty(Model.ReturnUrl))
+    {
+        <hr>
+        <p class="mb-0">本页面将在 @Model.RedirectSeconds 秒后自动跳转，如没有跳转请 <a href="@Model.ReturnUrl" class="alert-link" data-timeout="@(Model.RedirectSeconds * 1000)">点击链接</a></p>
+        <script src="~/js/message-redirect.js"></script>
+    }
+</div>

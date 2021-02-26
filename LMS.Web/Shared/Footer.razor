@@ -1,0 +1,21 @@
+﻿@*<FooterView Copyright="Proudly powered by .NET 5 with ❤" Links="Links" />*@
+
+<GlobalFooter Links="Links">
+    <Copyright>
+        <p>Proudly powered by .NET 5 with ❤</p>
+    </Copyright>
+</GlobalFooter>
+
+@code
+{
+    LinkItem[] Links { get; } =
+    {
+        new ()
+        {
+            Key = "github",
+            Title = (RenderFragment)(@<Icon Type="github" />),
+            Href = "https://github.com/",
+            BlankTarget = true,
+        }
+    };
+}

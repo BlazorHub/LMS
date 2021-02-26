@@ -1,0 +1,51 @@
+﻿@page "/authentication/{action}"
+@inject IStringLocalizer<Authentication> Localizer
+
+<RemoteAuthenticatorView Action="@Action">
+    @*authentication/login*@
+    <LoggingIn>
+        <p>@Localizer["Checking login state..."]</p>
+    </LoggingIn>
+
+    @*authentication/login-callback*@
+    <CompletingLoggingIn>
+        <p>@Localizer["Completing login..."]</p>
+    </CompletingLoggingIn>
+
+    @*authentication/login-failed*@
+    <LogInFailed>
+        <p>@Localizer["There was an error trying to log you in: '{0}'", context]</p>
+    </LogInFailed>
+
+    @*authentication/logout*@
+    <LogOut>
+        <p>@Localizer["Processing logout..."]</p>
+    </LogOut>
+
+    @*authentication/logout-callback*@
+    <CompletingLogOut>
+        <p>@Localizer["Processing logout callback..."]</p>
+    </CompletingLogOut>
+
+    @*authentication/logout-failed*@
+    <LogOutFailed>
+        <p>@Localizer["There was an error trying to log you out: '{0}'", context]</p>
+    </LogOutFailed>
+
+    @*authentication/logged-out*@
+    <LogOutSucceeded>
+        <p>@Localizer["You are logged out."]</p>
+    </LogOutSucceeded>
+
+    @*authentication/profile*@
+    @*<UserProfile></UserProfile>*@
+
+    @*authentication/register*@
+    @*<Registering></Registering>*@
+</RemoteAuthenticatorView>
+
+@code
+{
+    [Parameter]
+    public string Action { get; set; }
+}

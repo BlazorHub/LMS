@@ -1,0 +1,29 @@
+﻿@page "/userinfo"
+@inherits PageComponent
+@attribute [Authorize]
+
+@using System.Text.Encodings.Web
+@using System.Text.Json
+@using System.Text.Unicode
+
+<h3>UserInfo</h3>
+<pre>@_user</pre>
+
+@code
+{
+    private string _user;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        
+        var encoderSettings = new TextEncoderSettings();
+        encoderSettings.AllowRanges(UnicodeRanges.All);
+
+        _user = JsonSerializer.Serialize<object>(CurrentUser, new JsonSerializerOptions
+        {
+            Encoder = JavaScriptEncoder.Create(encoderSettings),
+            WriteIndented = true
+        });
+    }
+}

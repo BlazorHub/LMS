@@ -1,0 +1,13 @@
+﻿@model RedirectViewModel
+@{
+    ViewBag.Title = "跳转";
+}
+
+<div class="redirect-page">
+    <div class="lead">
+        <p>本页面将自动跳转回应用程序</p>
+    </div>
+</div>
+
+<meta http-equiv="refresh" content="0;url=@Model.RedirectUrl" data-url="@Model.RedirectUrl">
+<script src="~/js/signin-redirect.js"></script>

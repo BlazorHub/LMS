@@ -1,0 +1,40 @@
+﻿@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+@inject IStringLocalizer<CultureSelector> Localizer
+
+@using System.Globalization
+
+<Menu Mode="MenuMode.Horizontal" Theme="MenuTheme.Dark" Selectable="false" SelectedKeys="new [] { Culture.Name }">
+    <SubMenu Title="@Localizer["Language"]" Placement="PlacementType.BottomCenter">
+        @foreach (var culture in SupportedCultures)
+        {
+            <MenuItem Key="@culture.Name" OnClick="@(() => { Culture = culture; })">@Localizer[culture.Name]</MenuItem>
+        }
+    </SubMenu>
+</Menu>
+
+@code
+{
+    private static readonly CultureInfo[] SupportedCultures =
+    {
+        CultureInfo.GetCultureInfo("en"),
+        CultureInfo.GetCultureInfo("zh-CN")
+    };
+
+    private CultureInfo Culture
+    {
+        get => CultureInfo.CurrentCulture.ConvertChineseCulture(CultureConvertDirection.ToExternal);
+        set
+        {
+            var culture = value.ConvertChineseCulture(CultureConvertDirection.ToInternal);
+
+            if (CultureInfo.CurrentCulture.Equals(culture) == false)
+            {
+                var js = JSRuntime as IJSInProcessRuntime;
+                js.InvokeVoid("blazorCulture.set", culture.Name);
+
+                NavigationManager.NavigateTo(NavigationManager.Uri, true);
+            }
+        }
+    }
+}

@@ -1,0 +1,26 @@
+﻿@page "/"
+@inherits PageComponent
+@inject IStringLocalizer<Index> Localizer
+
+<PageContainer Title="首页">
+    <Card>
+        <AuthorizeView>
+            <Authorized>
+                <Alert Type="success" ShowIcon Banner Style="margin: -12px; margin-bottom: 24px">
+                    <Text>@Localizer["You have successfully logged in!"]</Text>
+                </Alert>
+            </Authorized>
+            <NotAuthorized>
+                <Alert Type="info" ShowIcon Banner Style="margin: -12px; margin-bottom: 24px">
+                    <Text>@Localizer["You must log in first to access the features."]</Text>
+                </Alert>
+            </NotAuthorized>
+        </AuthorizeView>
+        <Title Level="2" Strong>@Localizer["Welcome to {0}", Config.Site.DisplayName]</Title>
+        <Paragraph>本系统为使用前后端分离模式、基于 .NET 5 中的 ASP.NET 技术开发的网站。</Paragraph>
+        <Paragraph>后端使用 WebAPI 技术进行开发。</Paragraph>
+        <Paragraph>前端使用 Blazor WebAssembly 技术进行开发。</Paragraph>
+        <Paragraph>数据库使用 PostgreSQL。</Paragraph>
+        <Paragraph>本系统是跨平台的，并支持基于 Docker 的容器化部署方式。</Paragraph>
+    </Card>
+</PageContainer>
