@@ -117,13 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Welcome to {0}" xml:space="preserve">
-    <value>欢迎来到 {0}</value>
+  <data name="DuplicatePhoneNumber" xml:space="preserve">
+    <value>手机号 {0} 已被使用。</value>
   </data>
-  <data name="You have successfully logged in!" xml:space="preserve">
-    <value>你已经成功登录！</value>
-  </data>
-  <data name="You must log in first to access the features." xml:space="preserve">
-    <value>你必须先登录以使用功能。</value>
+  <data name="IdNotMatch" xml:space="preserve">
+    <value>编号不一致。</value>
   </data>
 </root>

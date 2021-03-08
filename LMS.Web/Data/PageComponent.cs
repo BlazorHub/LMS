@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Localization;
 using AntDesign;
 using LMS.Shared;
@@ -15,6 +19,12 @@ namespace LMS.Web.Data
         [CascadingParameter]
         private MainLayout MainLayout { get; set; }
 
+        [CascadingParameter]
+        private Task<AuthenticationState> AuthenticationStateTask { get; set; }
+
+        [Inject]
+        protected NavigationManager NavigationManager { get; set; }
+
         [Inject]
         private IStringLocalizer<PageComponent> Localizer { get; set; }
 
@@ -22,7 +32,17 @@ namespace LMS.Web.Data
         private MessageService Message { get; set; }
         
         protected User CurrentUser { get; private set; }
-        
+
+        protected static string AddQueryString(string url, IDictionary<string, string> query) =>
+            QueryHelpers.AddQueryString(url, query);
+
+        protected static IDictionary<string, string> GetQueryString(string queryString) => 
+            QueryHelpers.ParseQuery(queryString)
+                .ToDictionary(k => k.Key, v => v.Value.ToString());
+
+        protected static IDictionary<string, string> GetQueryString(NavigationManager navigationManager) =>
+            GetQueryString(navigationManager.ToAbsoluteUri(navigationManager.Uri).Query);
+
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();

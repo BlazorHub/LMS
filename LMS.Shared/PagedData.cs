@@ -6,6 +6,8 @@ namespace LMS.Shared
 {
     public class PagedData<T>
     {
+        public int Total { get; set; }
+
         public int CurrentPage { get; set; }
 
         public int TotalPage { get; set; }
@@ -18,8 +20,9 @@ namespace LMS.Shared
 
         public PagedData(IQueryable<T> baseData, int page, int pageSize)
         {
+            this.Total = baseData.Count();
             this.CurrentPage = page;
-            this.TotalPage = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(baseData.Count()) / pageSize));
+            this.TotalPage = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(this.Total) / pageSize));
             this.PageSize = pageSize;
             this.Data = baseData.Skip((page - 1) * pageSize).Take(pageSize);
         }

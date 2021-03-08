@@ -1,0 +1,53 @@
+﻿@page "/user"
+@inherits PageComponent
+@attribute [Authorize]
+
+<Table DataSource="_data"
+       TItem="User"
+       Total="_total"
+       @bind-PageIndex="_page"
+       @bind-PageSize="_pageSize"
+       OnPageIndexChange="OnPageIndexChange"
+       RowClassName="@(_ => "editable-row")"
+       Bordered
+       TableLayout="fixed">
+    <ChildContent Context="data">
+        <AntDesign.Column @bind-Field="@data.Id" />
+        <AntDesign.Column TData="string" Title="UserName">
+            @if (!_editCache[data.Id].edit)
+            {
+                @data.UserName
+            }
+            else
+            {
+                <Input @bind-Value="_editCache[data.Id].data.UserName" />
+            }
+        </AntDesign.Column>
+        <AntDesign.Column TData="string" Title="Email">
+            @if (!_editCache[data.Id].edit)
+            {
+                @data.Email
+            }
+            else
+            {
+                <Input @bind-Value="_editCache[data.Id].data.Email" />
+            }
+        </AntDesign.Column>
+        <ActionColumn Title="Action">
+            @if (!_editCache[data.Id].edit)
+            {
+                <a @onclick="() => StartEdit(data.Id)">Edit</a>
+            }
+            else
+            {
+                <a @onclick="() => SaveEdit(data.Id)" class="save">Save</a>
+                <Popconfirm Title="Sure to cancel?"
+                            OnConfirm="() => CancelEdit(data.Id)"
+                            OkText="Yes"
+                            CancelText="No">
+                    <a>Cancel</a>
+                </Popconfirm>
+            }
+        </ActionColumn>
+    </ChildContent>
+</Table>

@@ -48,7 +48,7 @@ namespace LMS.Shared
         }
 
         // Caution! All existing databases will be dropped if this value is true.
-        public const bool ReCreateDatabaseOnStart = false;
+        public const bool ReCreateDatabaseOnStart = true;
 
         public static readonly Database Database = new ()
         {

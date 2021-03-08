@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
@@ -54,6 +55,20 @@ namespace LMS.Shared
                 IsActive = true,
                 RegisterDateTime = DateTime.UtcNow
             }, "shortname");
+
+            foreach (var index in Enumerable.Range(1, 30).Select(x => x.ToString("00")))
+            {
+                await userManager.CreateAsync(new User
+                {
+                    UserName = $"user{index}",
+                    Email = $"user{index}@LMS.com",
+                    PhoneNumber = $"0000000{index}00",
+                    Name = $"user{index}",
+                    Type = UserType.User,
+                    IsActive = true,
+                    RegisterDateTime = DateTime.UtcNow
+                }, $"user{index}");
+            }
         }
     }
 }

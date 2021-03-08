@@ -55,7 +55,25 @@ namespace LMS.Web
                 Key = "/userinfo",
                 Icon = "user"
             });
-            
+
+            if (user != null && user.Type == UserType.Administrator)
+            {
+                menuDataList.Add(new MenuDataItem
+                {
+                    Name = "用户",
+                    Icon = "user",
+                    Children = new MenuDataItem[]
+                    {
+                        new ()
+                        {
+                            Path = "/user",
+                            Name = "用户列表",
+                            Key = "/user"
+                        }
+                    }
+                });
+            }
+
             return menuDataList.ToArray();
         }
     }

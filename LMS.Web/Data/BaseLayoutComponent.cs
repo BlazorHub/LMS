@@ -1,15 +1,10 @@
 ﻿using System.Net.Http;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
 
 namespace LMS.Web.Data
 {
     public class BaseLayoutComponent : LayoutComponentBase
     {
-        [CascadingParameter]
-        protected Task<AuthenticationState> AuthenticationStateTask { get; set; }
-
         [Inject]
         private IHttpClientFactory HttpClientFactory { get; set; }
 
