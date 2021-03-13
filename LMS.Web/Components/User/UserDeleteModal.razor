@@ -1,0 +1,13 @@
+﻿@inherits BaseComponent
+
+<Button OnClick="@ShowModal" Type="danger">@ButtonText</Button>
+<Modal Title="@Title"
+       Visible="@_visible"
+       ConfirmLoading="@_confirmLoading"
+       OkText="@Localizer["Ok"].Value"
+       CancelText="@Localizer["Cancel"].Value"
+       OkButtonProps="new ButtonProps { Danger = true }"
+       OnOk="@HandleOk"
+       OnCancel="@HandleCancel">
+    <p>@Localizer["Are you sure you want to delete this account?"]</p>
+</Modal>

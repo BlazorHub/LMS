@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Routing;
@@ -11,12 +10,10 @@ namespace LMS.Web.Pages.User
 {
     public partial class Index : IDisposable
     {
-        private readonly IDictionary<string, (bool edit, LMS.Shared.User data)> _editCache = new Dictionary<string, (bool edit, LMS.Shared.User data)>();
+        private PagedData<Shared.User> _pagedData;
+
+        private IEnumerable<Shared.User> _data;
         
-        private PagedData<LMS.Shared.User> _pagedData;
-
-        private IEnumerable<LMS.Shared.User> _data;
-
         private bool _locationChanged;
         
         private int _total;
@@ -30,9 +27,7 @@ namespace LMS.Web.Pages.User
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-
-            ParseQueryString();
-
+            
             NavigationManager.LocationChanged += HandleLocationChanged;
 
             await GetPagedDataAsync();
@@ -59,7 +54,6 @@ namespace LMS.Web.Pages.User
 
         private void HandleLocationChanged(object sender, LocationChangedEventArgs e)
         {
-            ParseQueryString();
             _locationChanged = true;
         }
 
@@ -72,10 +66,18 @@ namespace LMS.Web.Pages.User
 
         private async Task GetPagedDataAsync()
         {
-            _pagedData = await AuthorizeHttpClient.GetFromJsonAsync<PagedData<LMS.Shared.User>>(GenerateQueryString("/accounts"));
+            ParseQueryString();
+
+            _pagedData = await AuthorizeHttpClient.GetFromJsonAsync<PagedData<Shared.User>>(GenerateQueryString("/accounts"));
             _data = _pagedData?.Data;
             _total = _pagedData?.Total ?? default;
-            UpdateEditCache();
+        }
+
+        private async Task AfterDelete()
+        {
+            await GetPagedDataAsync();
+
+            StateHasChanged();
         }
         
         // Set QueryString to internal field from URL
@@ -118,33 +120,6 @@ namespace LMS.Web.Pages.User
             }
 
             return AddQueryString(baseUrl, query);
-        }
-
-        private void StartEdit(string id)
-        {
-            var data = _editCache[id];
-            data.edit = true;
-            _editCache[id] = data;
-        }
-
-        private void CancelEdit(string id)
-        {
-            var data = _data.FirstOrDefault(item => item.Id == id);
-            _editCache[id] = new (false, data);
-        }
-
-        private void SaveEdit(string id)
-        {
-            var data = _data.FirstOrDefault(item => item.Id == id);
-            _editCache[id] = new (false, data);
-        }
-
-        private void UpdateEditCache()
-        {
-            _data.ForEach(item =>
-            {
-                _editCache[item.Id] = new (false, item);
-            });
         }
     }
 }

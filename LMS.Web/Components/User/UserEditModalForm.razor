@@ -1,0 +1,52 @@
+﻿@inherits ModalTemplate<User>
+@inject IStringLocalizer<UserEditModalForm> Localizer
+
+<Form Model="@_model" 
+      LabelCol="new ColLayoutParam { Span = 6 }"
+      WrapperCol="new ColLayoutParam { Span = 18 }"
+      OnFinish="OnFinish"
+      OnFinishFailed="OnFinishFailed">
+    <FormItem Required Label="@context.DisplayNameFor(nameof (context.Id))">
+        @context.Id
+    </FormItem>
+
+    <FormItem Required Label="@context.DisplayNameFor(nameof (context.Type))">
+        <Select TItem="UserType" TItemValue="UserType" @bind-Value="context.Type">
+            <SelectOptions>
+                @foreach (var userType in Enum.GetValues<UserType>())
+                {
+                    <SelectOption TItem="UserType" TItemValue="UserType" Label="@userType.DisplayName()" Value="@userType" />
+                }
+            </SelectOptions>
+        </Select>
+    </FormItem>
+
+    <FormItem Required Label="@context.DisplayNameFor(nameof (context.UserName))">
+        <Input Type="text" @bind-Value="context.UserName" />
+    </FormItem>
+
+    <FormItem Required Label="@context.DisplayNameFor(nameof (context.Email))">
+        <Input Type="email" @bind-Value="context.Email" />
+    </FormItem>
+
+    <FormItem Required Label="@context.DisplayNameFor(nameof (context.PhoneNumber))">
+        <Input Type="tel" @bind-Value="context.PhoneNumber" />
+    </FormItem>
+
+    <FormItem Required Label="@context.DisplayNameFor(nameof (context.Name))">
+        <Input Type="text" @bind-Value="context.Name" />
+    </FormItem>
+
+    <FormItem Required Label="@context.DisplayNameFor(nameof (context.IsActive))">
+        <Select TItem="bool" TItemValue="bool" @bind-Value="context.IsActive">
+            <SelectOptions>
+                <SelectOption TItem="bool" TItemValue="bool" Label="@Localizer["Yes"]" Value="true" />
+                <SelectOption TItem="bool" TItemValue="bool" Label="@Localizer["No"]" Value="false" />
+            </SelectOptions>
+        </Select>
+    </FormItem>
+
+    <FormItem Required Label="@context.DisplayNameFor(nameof (context.RegisterDateTime))">
+        @context.RegisterDateTime.ToLocalTime().ToString("yyyy/M/d HH:mm")
+    </FormItem>
+</Form>

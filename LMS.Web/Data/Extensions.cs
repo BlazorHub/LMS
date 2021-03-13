@@ -1,6 +1,10 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using System.Linq;
 using System.Net.Http;
+using System.Reflection;
+using System.Text.Json;
 using LMS.Shared;
 
 namespace LMS.Web.Data
@@ -48,5 +52,13 @@ namespace LMS.Web.Data
                 _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, null)
             };
         }
+
+        public static string DisplayNameFor<TModel>(this TModel _, string propertyName) =>
+            typeof(TModel).GetProperty(propertyName)?.GetCustomAttribute<DisplayAttribute>()?.Name ?? "";
+        
+        public static string DisplayName(this Enum value) =>
+            value.GetType().GetMember(value.ToString()).First().GetCustomAttribute<DisplayAttribute>()?.Name ?? "";
+
+        public static T JsonClone<T>(this T obj) => JsonSerializer.Deserialize<T>(JsonSerializer.Serialize(obj));
     }
 }

@@ -1,0 +1,39 @@
+﻿@inject NavigationManager NavigationManager
+@inject SignOutSessionStateManager SignOutManager
+@inject IStringLocalizer<Header> Localizer
+
+<AuthorizeView>
+    <Authorized>
+        <CultureSelector />
+        <Menu Mode="MenuMode.Horizontal" Theme="MenuTheme.Dark" Selectable="false">
+            <SubMenu Title="@Localizer["Hello, {0}", context.User.Identity.Name]" Placement="PlacementType.BottomRight">
+                <MenuItem>
+                    <a @onclick="@(() => { NavigationManager.NavigateTo($"{Config.IdP.Url}/Account/Edit?returnUrl={Uri.EscapeDataString(NavigationManager.Uri)}"); })">@Localizer["Profile"]</a>
+                </MenuItem>
+                <MenuItem>
+                    <a class="nav-link" @onclick="BeginSignOut">@Localizer["Logout"]</a>
+                </MenuItem>
+            </SubMenu>
+        </Menu>
+    </Authorized>
+    <NotAuthorized>
+        <CultureSelector />
+        <Menu Mode="MenuMode.Horizontal" Theme="MenuTheme.Dark" Selectable="false" Style="margin-right: 16px;">
+            <MenuItem>
+                <a @onclick="@(() => { NavigationManager.NavigateTo($"{Config.IdP.Url}/Account/Register?returnUrl={Uri.EscapeDataString(NavigationManager.Uri)}"); })">@Localizer["Register"]</a>
+            </MenuItem>
+            <MenuItem>
+                <a href="/authentication/login">@Localizer["Login"]</a>
+            </MenuItem>
+        </Menu>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code
+{
+    private async Task BeginSignOut(MouseEventArgs args)
+    {
+        await SignOutManager.SetSignOutState();
+        NavigationManager.NavigateTo("authentication/logout");
+    }
+}

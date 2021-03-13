@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 
@@ -14,6 +15,18 @@ namespace LMS.Shared
         /// <summary>管理员</summary>
         [Display(Name = "管理员")]
         Administrator = 255
+    }
+
+    /// <summary>用户角色</summary>
+    public enum UserRole
+    {
+        /// <summary>学生</summary>
+        [Display(Name = "学生")]
+        Student = 1,
+
+        /// <summary>教师</summary>
+        [Display(Name = "教师")]
+        Teacher = 2
     }
 
     /// <summary>用户</summary>
@@ -68,6 +81,10 @@ namespace LMS.Shared
         [DataType(DataType.DateTime)]
         [Required]
         public DateTime RegisterDateTime { get; set; }
+
+        public ICollection<Course> Courses { get; set; }
+
+        public List<UserCourse> UserCourses { get; set; }
 
         public object ToSafe()
         {

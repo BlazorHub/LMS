@@ -26,11 +26,11 @@ namespace LMS.Web.Data
         protected NavigationManager NavigationManager { get; set; }
 
         [Inject]
-        private IStringLocalizer<PageComponent> Localizer { get; set; }
+        protected MessageService Message { get; set; }
 
         [Inject]
-        private MessageService Message { get; set; }
-        
+        private IStringLocalizer<PageComponent> Localizer { get; set; }
+
         protected User CurrentUser { get; private set; }
 
         protected static string AddQueryString(string url, IDictionary<string, string> query) =>
@@ -77,13 +77,13 @@ namespace LMS.Web.Data
                 }
                 catch (Exception e)
                 {
-                    await Message.Error(Localizer["Unknown error occurred: '{0}', please refresh the page or try again later.", e.Message].Value);
+                    Message.Error(Localizer["Unknown error occurred: '{0}', please refresh the page or try again later.", e.Message].Value);
                     return null;
                 }
 
                 if (user == null)
                 {
-                    await Message.Error(Localizer["An error occurred: 'Unable to obtain user information', please refresh the page or try again later."].Value);
+                    Message.Error(Localizer["An error occurred: 'Unable to obtain user information', please refresh the page or try again later."].Value);
                     return null;
                 }
             }

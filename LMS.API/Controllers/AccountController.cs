@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using LMS.Shared;
 using LMS.API.Models;
@@ -17,9 +18,9 @@ namespace LMS.API.Controllers
     {
         private IStringLocalizer<AccountController> Localizer { get; }
 
-        public AccountController(IServiceProvider serviceProvider, IStringLocalizer<AccountController> localizer) : base(serviceProvider)
+        public AccountController(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            Localizer = localizer;
+            Localizer = serviceProvider.GetRequiredService<IStringLocalizer<AccountController>>();
         }
 
         [HttpGet("{id}")]
@@ -70,7 +71,7 @@ namespace LMS.API.Controllers
                     like(x.PhoneNumber, $"%{keyword}%"));
             }
 
-            return Ok(new PagedData<User>(users, page, pageSize));
+            return Ok(new PagedData<User>(users.OrderBy(x => x.RegisterDateTime), page, pageSize));
         }
 
         // For Administrator only

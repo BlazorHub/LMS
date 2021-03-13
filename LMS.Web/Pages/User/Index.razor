@@ -1,6 +1,7 @@
 ﻿@page "/user"
 @inherits PageComponent
 @attribute [Authorize]
+@inject IStringLocalizer<Index> Localizer
 
 <Table DataSource="_data"
        TItem="User"
@@ -8,46 +9,34 @@
        @bind-PageIndex="_page"
        @bind-PageSize="_pageSize"
        OnPageIndexChange="OnPageIndexChange"
-       RowClassName="@(_ => "editable-row")"
        Bordered
        TableLayout="fixed">
     <ChildContent Context="data">
-        <AntDesign.Column @bind-Field="@data.Id" />
-        <AntDesign.Column TData="string" Title="UserName">
-            @if (!_editCache[data.Id].edit)
-            {
-                @data.UserName
-            }
-            else
-            {
-                <Input @bind-Value="_editCache[data.Id].data.UserName" />
-            }
+        <AntDesign.Column @bind-Field="data.Id" Title="@data.DisplayNameFor(nameof (data.Id))" />
+
+        <AntDesign.Column TData="UserType" Title="@data.DisplayNameFor(nameof (data.Type))">
+            @data.Type.DisplayName()
         </AntDesign.Column>
-        <AntDesign.Column TData="string" Title="Email">
-            @if (!_editCache[data.Id].edit)
-            {
-                @data.Email
-            }
-            else
-            {
-                <Input @bind-Value="_editCache[data.Id].data.Email" />
-            }
+
+        <AntDesign.Column @bind-Field="data.UserName" Title="@data.DisplayNameFor(nameof (data.UserName))" />
+
+        <AntDesign.Column @bind-Field="data.Email" Title="@data.DisplayNameFor(nameof (data.Email))" />
+
+        <AntDesign.Column @bind-Field="data.PhoneNumber" Title="@data.DisplayNameFor(nameof (data.PhoneNumber))" />
+
+        <AntDesign.Column @bind-Field="data.Name" Title="@data.DisplayNameFor(nameof (data.Name))" />
+
+        <AntDesign.Column TData="bool" Title="@data.DisplayNameFor(nameof (data.IsActive))">
+            @(data.IsActive ? Localizer["Yes"] : Localizer["No"])
         </AntDesign.Column>
-        <ActionColumn Title="Action">
-            @if (!_editCache[data.Id].edit)
-            {
-                <a @onclick="() => StartEdit(data.Id)">Edit</a>
-            }
-            else
-            {
-                <a @onclick="() => SaveEdit(data.Id)" class="save">Save</a>
-                <Popconfirm Title="Sure to cancel?"
-                            OnConfirm="() => CancelEdit(data.Id)"
-                            OkText="Yes"
-                            CancelText="No">
-                    <a>Cancel</a>
-                </Popconfirm>
-            }
+
+        <AntDesign.Column TData="DateTime" Title="@data.DisplayNameFor(nameof (data.RegisterDateTime))">
+            @data.RegisterDateTime.ToLocalTime().ToString("yyyy/M/d HH:mm")
+        </AntDesign.Column>
+
+        <ActionColumn Title="@Localizer["Action"]" Style="display: flex; justify-content: space-around;">
+            <UserEditModal @bind-User="data" Title="@Localizer["User Edit"]" ButtonText="@Localizer["Edit"]" />
+            <UserDeleteModal UserId="@data.Id" Title="@Localizer["User Delete"]" ButtonText="@Localizer["Delete"]" AfterDelete="AfterDelete" />
         </ActionColumn>
     </ChildContent>
 </Table>
